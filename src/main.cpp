@@ -5,7 +5,7 @@
 
 using namespace std;
 int main(){
-    int option = 0;
+   /* int option = 0;
     Task task;
     string title;
 
@@ -43,6 +43,19 @@ int main(){
     }
 
     cout << "Goodbye!" <<endl;
+    */
+
+    Task t1;
+    t1.setId(1);
+
+    cout << t1.getId() << endl;
+    t1.setTitle("Buy groceries");
+    t1.setIsCompleted(false);
+    t1.setPriority(2);
+    t1.setDueDate("2026-07-20");
+
+    cout << t1 <<endl;
+    
     return 0;
 
 }
