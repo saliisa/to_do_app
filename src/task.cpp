@@ -3,7 +3,7 @@
 #include <iostream>
 //constructor
 Task::Task()
-    : id(0),
+    : id(1),
       title(""),
       isCompleted(false),
       priority(0),
