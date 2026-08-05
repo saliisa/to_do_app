@@ -1,6 +1,7 @@
 //Task Behaviour
-#include "task.h"
+#include "task.hpp"
 #include <iostream>
+
 //constructor
 Task::Task()
     : id(1),
@@ -74,4 +75,15 @@ std::ostream& operator<<(std::ostream& os, const Task& task) {
        << "Due Date: " << task.dueDate
        << " }";
     return os;
+}
+
+json Task::toJson() const{ //converts a Task in a json Object
+    return json{
+        {"id", id},
+        {"title", title},
+        {"isCompleted", isCompleted},
+        {"priority", priority},
+        {"dueDate", dueDate},
+
+    };
 }

@@ -1,10 +1,33 @@
 #include <iostream>
-#include "taskManager.h"
+#include "taskManager.hpp"
 #include <algorithm>
+#include <fstream>
+
+#include "json.hpp"
+using json = nlohmann::json;
 
 void TaskManager:: addTask(Task task){
-    tasks.push_back(task);
+    Task t = task;
+    if(task.getId() == 0){
+        t.setId(nextId++);
+    }
+    tasks.push_back(t);
 }
+// void TaskManager:: addTask(int id, std::string title, bool status, int priority, std::string dueDate){ //to be implemented){
+ 
+void TaskManager::saveToJson(){
+    json j; //empty json array
+    
+    for(auto& t : tasks){
+        j.push_back(t.toJson());
+    }
+
+    std::ofstream file("tasks.json");
+    file << j.dump(4); // writes the JSON array into the file
+    // converts json to string
+    //format it with 4 spaces indentation
+}
+
 
 void TaskManager:: deleteTask(int id){
    tasks.erase(
