@@ -2,9 +2,12 @@
 #include "task.hpp"
 #include <iostream>
 
+//!!Input validation
+
+
 //constructor
 Task::Task()
-    : id(1),
+    : id(0),
       title(""),
       isCompleted(false),
       priority(0),
@@ -39,7 +42,10 @@ std::string Task::getTitle() const{
 }
 
 void Task::setTitle(const std::string &title){
-    this->title = title;
+    if(!title.empty()){
+        this->title = title;
+    }
+  
 }
 
 bool Task::getIsCompleted() const{
