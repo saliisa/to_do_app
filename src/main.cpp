@@ -13,15 +13,10 @@ int main(){
     TaskUpdate update;
 
     string title;
-    bool isCompleted;
-    int priority;
     string dueDate;
     int inputId;
-
-    string newTitle;
     string status;
-    string prio;
-    string date;
+    string priority;
 
     while(option != 6){
         displayMenu();
@@ -43,20 +38,15 @@ int main(){
                 getline(cin,title);
 
                 //priority
-                cout << "Priority of task ((1) Urgent, (2) Important, (3) Routine ): " <<endl;
-                while(!(cin >> priority)){ 
-                    cin.clear();
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                    cout << "Please input a valid number " <<endl;
-                }
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "Priority of task ((1) Urgent, (2) Important, (3) Routine): " <<endl;
+                getline(cin,priority); //validation needed
                 
                 //due date
                 cout << "Due date of task (YYYY-MM-DD): " <<endl;
-                getline(cin,dueDate); //------validation needed
+                getline(cin,dueDate); //validation needed
 
                 task.setTitle(title);
-                task.setPriority(priority);
+                task.setPriority(stoi(priority));
                 task.setDueDate(dueDate);
 
                 manager.addTask(task);
@@ -69,30 +59,30 @@ int main(){
 
                 //title
                 cout << "New title (leave empty to keep): " ;
-                getline(cin, newTitle);
-                if(!newTitle.empty()){
-                    update.title = newTitle;
+                getline(cin, title); 
+                if(!title.empty()){
+                    update.title = title;
                 }
 
                 //status
-                cout << "Completed? (0 - No / 1 - Yes / leave empty to keep): " ;
-                getline(cin, status);
+                cout << "Completed? (Input number: 0 - No / 1 - Yes / leave empty to keep): " ;
+                getline(cin, status); //validation needed
                 if(!status.empty()){
                    update.status = (status == "1");
                 }
 
                 //priority
                 cout << "Priority ((1) Urgent / (2) Important / (3) Routine / leave empty to keep): " ;
-                getline(cin, prio);
-                if(!prio.empty()){
-                   update.priority = stoi(prio);
+                getline(cin, priority); //validation needed
+                if(!priority.empty()){
+                   update.priority = stoi(priority);
                 }
 
                 //due date
                 cout << "Due Date (leave empty to keep):  " ;
-                getline(cin, date);
-                if(!date.empty()){
-                   update.dueDate = date;
+                getline(cin, dueDate); //validation needed
+                if(!dueDate.empty()){
+                   update.dueDate = dueDate;
                 }
 
                 if(manager.editTask(inputId, update)){
@@ -132,53 +122,6 @@ int main(){
 
     cout << "Goodbye!" <<endl;
     
-
-  /*  Task t1;
-    Task t2;
-
-    TaskManager manager;
-
-    t1.setId(1);
-    cout << t1.getId() << endl;
-    t1.setTitle("Buy groceries");
-    t1.setIsCompleted(true);
-    t1.setPriority(2);
-    t1.setDueDate("2026-07-20");
-
-    t2.setId(2);
-    t2.setTitle("Do laundry");
-    t2.setIsCompleted(false);
-    t2.setPriority(3);
-    t2.setDueDate("2026-07-21");
-
-    //cout << t1 <<endl;
-
-    manager.addTask(t1);
-    manager.addTask(t2);
-    cout << "all tasks:" <<endl;
-    manager.listAllTasks();
-
-
-   cout << "Pick an ID: " << endl;
-    
-    int id;
-
-    cin >> id;
-
-    manager.deleteTask(id);
-
-    //cout << "all tasks after deletion:" <<endl;
-   // manager.listAllTasks();
-   cout << "list of completed tasks: " <<endl;
-   manager.listCompletedTasks();
-
-   manager.editTask(2, "Do laundry", true, 3, "2026-07-21" );
-
-   cout << "all tasks after editing: " << endl;
-   manager.listAllTasks();
-*/
-    cout << "all tasks:" <<endl;
-    manager.listAllTasks();
     return 0;
 
     
