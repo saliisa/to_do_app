@@ -1,16 +1,23 @@
 #include <iostream>
-#include "taskManager.hpp"
+#include "utils.hpp"
 #include <algorithm>
 #include <fstream>
 
 #include "json.hpp"
 using json = nlohmann::json;
 
-void TaskManager:: addTask(Task task){
+bool TaskManager:: addTask(Task task){
+
+    if(!validateTitle(task.getTitle()) || !validateDate(task.getDueDate()) || 
+        task.getPriority() < 1 || task.getPriority() > 3){
+        return false;
+    }
+
     if(task.getId() == 0){
         task.setId(nextId++);
     }
     tasks.push_back(task);
+    return true;
 }
 // void TaskManager:: addTask(int id, std::string title, bool status, int priority, std::string dueDate){ //to be implemented){
  
@@ -28,14 +35,22 @@ void TaskManager::saveToJson(){
 }
 
 
-void TaskManager::deleteTask(int id){
-   tasks.erase(
-    std::remove_if(tasks.begin(), tasks.end(), //scans vector from beginning to end; moves all elements that should NOT be removed to the front; moves all elements that should be removed to the back; returns an iterator pointing to the first element that should be erased; this returned iterator becomes the start of the erase range
+bool TaskManager::deleteTask(int id){
+   auto newEnd =  std::remove_if(
+        tasks.begin(), 
+        tasks.end(), //scans vector from beginning to end; moves all elements that should NOT be removed to the front; moves all elements that should be removed to the back; returns an iterator pointing to the first element that should be erased; this returned iterator becomes the start of the erase range
         [id](const Task& t){ // [id] captures variable ID from outside the lambda so you can use it inside
             return t.getId() == id; //tells remove_if to remove this task if its ID matches the one we're looking for 
-        }),
-    tasks.end() // removes everything from the first removed element to the end of the vector
-   );
+        }
+    );
+
+    if(newEnd == tasks.end()){
+        return false; // nothing was found
+    }
+
+    tasks.erase(newEnd, tasks.end());
+    return true; // task was deleted
+
 }
 
 //needed?
@@ -91,4 +106,14 @@ void TaskManager::listCompletedTasks(){
             std::cout << i << std::endl;
         } 
     }
+}
+
+bool TaskManager::taskExists(int id){
+    for(auto& t : tasks){
+        if(t.getId() == id){
+            return true;
+        }
+       
+    }
+    return false;
 }

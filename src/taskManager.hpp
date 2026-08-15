@@ -20,15 +20,17 @@ struct TaskUpdate{
 
 class TaskManager{
     public:
-        void addTask(Task task);
+        bool addTask(Task task);
         void editTask(int id,  std::string title, bool status, int priority, std::string dueDate);
-        void deleteTask(int id);
+        bool deleteTask(int id);
         void listAllTasks();
         void listCompletedTasks();
 
         bool editTask(int id, const TaskUpdate& update);
+        bool taskExists(int id);
 
         void saveToJson();
+       // void loadFromJson();
 
     private:
         std::vector<Task> tasks; //resizeable array
