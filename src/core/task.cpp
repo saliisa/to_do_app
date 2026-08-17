@@ -83,7 +83,7 @@ std::ostream& operator<<(std::ostream& os, const Task& task) {
     return os;
 }
 
-json Task::toJson() const{ //converts a Task in a json Object
+/*json Task::toJson() const{ //converts a Task in a json Object
     return json{
         {"id", id},
         {"title", title},
@@ -92,4 +92,4 @@ json Task::toJson() const{ //converts a Task in a json Object
         {"dueDate", dueDate},
 
     };
-}
+}*/

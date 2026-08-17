@@ -1,0 +1,12 @@
+#ignore .vscode
+.vscode
+
+#ignore json storage
+json.hpp
+tasks.json
+
+#ignore build file
+build
+
+#ignore testsDelete containing manually complied c++ files
+testsDelete

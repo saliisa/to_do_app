@@ -4,8 +4,8 @@
 #include <chrono>
 #ifndef TASK_HPP
 #define TASK_HPP
-#include "json.hpp"
-using json = nlohmann::json;
+//#include "json.hpp"
+//using json = nlohmann::json;
 
 class Task{ //automatically  private
     int id; 
@@ -42,7 +42,7 @@ class Task{ //automatically  private
     friend std::ostream& operator<<(std::ostream& os, const Task& task);
 
     //json
-    json toJson() const;
+    //json toJson() const;
 };
 
 #endif

@@ -1,10 +1,22 @@
 #include <iostream>
-#include "utils.hpp"
+#include "../utils/utils.hpp"
 #include <algorithm>
 #include <fstream>
 
-#include "json.hpp"
-using json = nlohmann::json;
+//#include "json.hpp"
+//using json = nlohmann::json;
+
+sqlite3* db;
+
+
+
+
+
+
+
+
+
+
 
 bool TaskManager:: addTask(Task task){
 
@@ -20,19 +32,7 @@ bool TaskManager:: addTask(Task task){
     return true;
 }
 // void TaskManager:: addTask(int id, std::string title, bool status, int priority, std::string dueDate){ //to be implemented){
- 
-void TaskManager::saveToJson(){
-    json j; //empty json array
-    
-    for(auto& t : tasks){
-        j.push_back(t.toJson());
-    }
 
-    std::ofstream file("tasks.json");
-    file << j.dump(4); // writes the JSON array into the file
-    // converts json to string
-    //format it with 4 spaces indentation
-}
 
 
 bool TaskManager::deleteTask(int id){
@@ -116,4 +116,34 @@ bool TaskManager::taskExists(int id){
        
     }
     return false;
-}
+} 
+
+/*void TaskManager::saveToJson(){
+    json j; //empty json array
+    
+    for(auto& t : tasks){
+        j.push_back(t.toJson());
+    }
+
+    std::ofstream file("tasks.json");
+    file << j.dump(4); // writes the JSON array into the file
+    // converts json to string
+    //format it with 4 spaces indentation
+}*/
+
+/*void TaskManager::loadFromJson(){
+   std::ifstream file("tasks.json");
+
+   json data = json::parse(file);
+
+   if(!file.is_open()){
+        //returns nothing if file doesnt exist 
+        return;
+   }
+
+   file >> data;
+
+   tasks.clear();
+}*/
+
+//void removeFromJson(int id){}

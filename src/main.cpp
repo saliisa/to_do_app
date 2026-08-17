@@ -1,7 +1,7 @@
 //entry point of the program
 #include <iostream>
 #include <limits>
-#include "utils.hpp"
+#include "./utils/utils.hpp"
 
 using namespace std;
 void displayMenu();
@@ -65,7 +65,7 @@ int main(){
                 task.setDueDate(dueDate);
                 
                if(manager.addTask(task)){
-                    cout << "\n== Task added successfully ==" <<endl;
+                    cout << "\n== Task added successfully ==" <<endl; 
                 } else{
                     cout << "\n== Failed to add task ==" <<endl;
                 }

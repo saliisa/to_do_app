@@ -20,6 +20,16 @@ struct TaskUpdate{
 
 class TaskManager{
     public:
+
+        //sqlite
+        bool openDatabase();
+        void createTable();
+        void insertTask(Task& task);
+        void getAllTasks();
+        void updateTask(Task& task);
+        void removeTask(int id);
+
+
         bool addTask(Task task);
         void editTask(int id,  std::string title, bool status, int priority, std::string dueDate);
         bool deleteTask(int id);
@@ -29,8 +39,9 @@ class TaskManager{
         bool editTask(int id, const TaskUpdate& update);
         bool taskExists(int id);
 
-        void saveToJson();
-       // void loadFromJson();
+        //void saveToJson();
+        //void loadFromJson();
+        //void removeFromJson(int id);
 
     private:
         std::vector<Task> tasks; //resizeable array
