@@ -2,9 +2,11 @@
 #include <iostream>
 #include <limits>
 #include "./utils/utils.hpp"
+#include "./database/database.hpp"
 
 using namespace std;
 void displayMenu();
+int DatabaseTest();
 int main(){
     int option = 0;
 
@@ -15,6 +17,8 @@ int main(){
     int inputId;
     string status;
     string priority;
+
+    DatabaseTest();
 
     while(option != 6){
         displayMenu();
@@ -180,6 +184,17 @@ int main(){
 
     cout << "Goodbye!" <<endl;
     
+    return 0;
+}
+
+int DatabaseTest(){
+    Database database("data/tasks.db");
+    if(!database.initialize()){
+        cerr << "Database initialization failed" << endl;
+        return 1;
+    }
+
+    cout << "Database initialized successfully" <<endl;
     return 0;
 }
 
