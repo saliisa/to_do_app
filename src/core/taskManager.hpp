@@ -21,11 +21,11 @@ struct TaskUpdate{
 class TaskManager{
     public:
 
-        //sqlite
+        //sqlite --> move to database.cpp?
         bool openDatabase();
         void createTable();
-        void insertTask(Task& task);
-        void getAllTasks();
+        bool insertTask(Task& task);
+        bool getAllTasks();
         void updateTask(Task& task);
         void removeTask(int id);
 
