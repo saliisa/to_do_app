@@ -6,7 +6,7 @@
 
 using namespace std;
 void displayMenu();
-int DatabaseTest();
+//int DatabaseTest();
 int main(){
     int option = 0;
 
@@ -18,16 +18,19 @@ int main(){
     string status;
     string priority;
 
-    DatabaseTest();
+   // DatabaseTest();
+  //  Database database("./data/tasks.db");
 
+
+  
     while(option != 6){
         displayMenu();
 
-        cout << "Choose an option (1 - 6): " <<endl;
+        std::cout << "Choose an option (1 - 6): " <<endl;
        while(!(cin >> option) || !validateInt(option,1,6)){
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Please input a valid number:  " <<endl;
+            std::cout << "Please input a valid number:  " <<endl;
         }
 
      switch(option){
@@ -36,43 +39,52 @@ int main(){
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
                 //Title
-                cout << "Title of task: " <<endl;
-                getline(cin,title);
+                std::cout << "Title of task: " <<endl;
+                std::getline(cin,title);
 
                 while(!validateTitle(title)){
-                    cout << "Title is invalid. Please try again: ";
-                    getline(cin,title);
+                    std::cout << "Title is invalid. Please try again: ";
+                    std::getline(cin,title);
                 }
 
                 task.setTitle(title);
             
                 //Priority
-                cout << "\nPriority of task ((1) Urgent, (2) Important, (3) Routine): " <<endl;
-                getline(cin,priority);
+                std::cout << "\nPriority of task ((1) Urgent, (2) Important, (3) Routine): " <<endl;
+                std::getline(cin,priority);
                 
                 while(!validatePriority(priority)){
-                    cout << "Priority is invalid. Please try again: ";
-                    getline(cin,priority);
+                    std::cout << "Priority is invalid. Please try again: ";
+                    std::getline(cin,priority);
                 }
 
                 task.setPriority(stoi(priority));
 
                 //Due date
-                cout << "\nDue date of task (YYYY-MM-DD): " <<endl;
-                getline(cin,dueDate);
+                std::cout << "\nDue date of task (YYYY-MM-DD): " <<endl;
+                std::getline(cin,dueDate);
 
                 while(!validateDate(dueDate)){
-                    cout << "Due date is invalid. Please try again: ";
-                    getline(cin,dueDate);
+                    std::cout << "Due date is invalid. Please try again: ";
+                    std::getline(cin,dueDate);
                 }
 
                 task.setDueDate(dueDate);
                 
+                //adding task 
                if(manager.addTask(task)){
-                    cout << "\n== Task added successfully ==" <<endl; 
+                    std::cout << "\n== Task added successfully ==" <<endl; 
                 } else{
-                    cout << "\n== Failed to add task ==" <<endl;
+                    std::cout << "\n== Failed to add task ==" <<endl;
                 }
+
+
+                //insert in sqlite
+               if(manager.insertTask(task)) {
+                    std::cout << "\nInserted task into tasks table successfully" << std::endl;
+               } else{
+                    std::cout << "\nFailed to insert task into tasks table" << std::endl;
+               }
                 
                 break;
             }
@@ -80,32 +92,32 @@ int main(){
             case 2:{
                 // edit task
                 TaskUpdate update;
-                cout << "Please input the ID you want to edit: " <<endl;
+                std::cout << "Please input the ID you want to edit: " <<endl;
                 cin >> inputId;
                 cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 
                if(!manager.taskExists(inputId)){
-                    cout << "ID does not exist." << endl;
+                    std::cout << "ID does not exist." << endl;
                     break;
                 }
 
                 //title
-                cout << "New title (leave empty to keep): " ;
-                getline(cin, title); 
+                std::cout << "New title (leave empty to keep): " ;
+                std::getline(cin, title); 
                 if(!title.empty()){
                     while(!validateTitle(title)){
-                        cout << "Invalid title. Try again: ";
-                        getline(cin,title);
+                        std::cout << "Invalid title. Try again: ";
+                        std::getline(cin,title);
                     }
                     update.title = title;
                 }
 
                 //status
-                cout << "Completed? (Input number: 0 - No / 1 - Yes / leave empty to keep): " ;
-                getline(cin, status);
+                std::cout << "Completed? (Input number: 0 - No / 1 - Yes / leave empty to keep): " ;
+                std::getline(cin, status);
                 while(!status.empty() && !validateStatus(status)){
-                   cout << "Invalid input. Enter 0, 1, or leave empty: ";
-                   getline(cin,status);
+                   std::cout << "Invalid input. Enter 0, 1, or leave empty: ";
+                   std::getline(cin,status);
                 }
 
                 if(!status.empty()){
@@ -113,24 +125,24 @@ int main(){
                 }
 
                 //priority
-                cout << "Priority ((1) Urgent / (2) Important / (3) Routine / leave empty to keep): " ;
-                getline(cin, priority);
+                std::cout << "Priority ((1) Urgent / (2) Important / (3) Routine / leave empty to keep): " ;
+                std::getline(cin, priority);
 
                 while(!priority.empty() && !validatePriority(priority)){
-                    cout << "Invalid priority. Enter 1, 2, 3, or leave empty: ";
-                    getline(cin,priority);
+                    std::cout << "Invalid priority. Enter 1, 2, 3, or leave empty: ";
+                    std::getline(cin,priority);
                 }
                 if(!priority.empty()){
                     update.priority = stoi(priority);
                 }
 
                 //due date
-                cout << "Due Date (leave empty to keep):  " ;
-                getline(cin, dueDate);
+                std::cout << "Due Date (leave empty to keep):  " ;
+                std::getline(cin, dueDate);
 
                 while(!dueDate.empty() && !validateDate(dueDate)){
-                    cout << "Invalid due date. Use YYYY-MM-DD or leave empty: ";
-                    getline(cin,dueDate);
+                    std::cout << "Invalid due date. Use YYYY-MM-DD or leave empty: ";
+                    std::getline(cin,dueDate);
                 }
               
                 if(!dueDate.empty()){
@@ -138,9 +150,9 @@ int main(){
                 }
 
                 if(manager.editTask(inputId, update)){
-                    cout << "Task updated successfully!." <<endl;
+                    std::cout << "Task updated successfully!." <<endl;
                 } else{
-                    cout << "Error updating task. " <<endl;
+                    std::cout << "Error updating task. " <<endl;
                 }
 
                 break;
@@ -148,23 +160,23 @@ int main(){
                
             case 3: 
                //remove task
-               cout << "Input ID of task you want to delete:  " <<endl;
+               std::cout << "Input ID of task you want to delete:  " <<endl;
 
                 while(!(cin >> inputId)){
                     cin.clear();
                     cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                    cout << "Please input a valid number " <<endl;
+                    std::cout << "Please input a valid number " <<endl;
                 }
 
                 if(!manager.taskExists(inputId)){
-                    cout << "ID does not exist." << endl;
+                    std::cout << "ID does not exist." << endl;
                     break;
                 }
 
                 if(manager.deleteTask(inputId)){
-                    cout << "Task deleted successfully!" <<endl;
+                    std::cout << "Task deleted successfully!" <<endl;
                 } else{
-                    cout << "Error deleting task" << endl;
+                    std::cout << "Error deleting task" << endl;
                 }
                
                 break;
@@ -181,29 +193,31 @@ int main(){
                 break; 
         }
     }
+   // database.~Database(); //closes db
 
-    cout << "Goodbye!" <<endl;
+
+    std::cout << "Goodbye!" <<endl;
     
     return 0;
 }
 
-int DatabaseTest(){
-    Database database("data/tasks.db");
-    if(!database.initialize()){
+/*int DatabaseTest(){
+    Database database("data/tasks.db"); //creates and opens database
+    if(!database.initialize()){ // checks if initlization works 
         cerr << "Database initialization failed" << endl;
         return 1;
     }
 
-    cout << "Database initialized successfully" <<endl;
+    std::cout << "Database initialized successfully" <<endl;
     return 0;
-}
+}*/
 
 void displayMenu(){
-    cout << "===== TO DO =====" <<endl;
-    cout << "1. Add Task" << endl;
-    cout << "2. Edit Task" << endl;
-    cout << "3. Delete Task" << endl;
-    cout << "4. Show List of Tasks" << endl;
-    cout << "5. Show Completed List of Tasks" << endl;
-    cout << "6. Exit" << endl;
+    std::cout << "===== TO DO =====" <<endl;
+    std::cout << "1. Add Task" << endl;
+    std::cout << "2. Edit Task" << endl;
+    std::cout << "3. Delete Task" << endl;
+    std::cout << "4. Show List of Tasks" << endl;
+    std::cout << "5. Show Completed List of Tasks" << endl;
+    std::cout << "6. Exit" << endl;
 }

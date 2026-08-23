@@ -30,7 +30,7 @@ class TaskManager{
         void removeTask(int id);
 
 
-        bool addTask(Task task);
+        bool addTask(Task& task);
         void editTask(int id,  std::string title, bool status, int priority, std::string dueDate);
         bool deleteTask(int id);
         void listAllTasks();
@@ -45,7 +45,6 @@ class TaskManager{
 
     private:
         std::vector<Task> tasks; //resizeable array
-        int nextId = 1;
 };
 
 
