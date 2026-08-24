@@ -22,12 +22,14 @@ class TaskManager{
     public:
 
         //sqlite --> move to database.cpp?
-        bool openDatabase();
-        void createTable();
+       // bool openDatabase(); //needed? 
+       // void createTable(); //needed? --> is the DB schema created?
         bool insertTask(Task& task);
         bool getAllTasks();
         void updateTask(Task& task);
         void removeTask(int id);
+
+       // static int callback(void* data, int argc, char **argv, char **colNames );
 
 
         bool addTask(Task& task);
@@ -44,7 +46,7 @@ class TaskManager{
         //void removeFromJson(int id);
 
     private:
-        std::vector<Task> tasks; //resizeable array
+        std::vector<Task> tasks; //resizeable array //remove once SQLite is implemented
 };
 
 

@@ -73,7 +73,7 @@ int main(){
                 
                 //adding task 
                if(manager.addTask(task)){
-                    std::cout << "\n== Task added successfully ==" <<endl; 
+                    std::cout << "\n== Task added successfully ==" <<endl;  //delete?
                 } else{
                     std::cout << "\n== Failed to add task ==" <<endl;
                 }
@@ -81,7 +81,7 @@ int main(){
 
                 //insert in sqlite
                if(manager.insertTask(task)) {
-                    std::cout << "\nInserted task into tasks table successfully" << std::endl;
+                    std::cout << "\nInserted task into tasks table successfully" << std::endl; //delete?
                } else{
                     std::cout << "\nFailed to insert task into tasks table" << std::endl;
                }
@@ -182,7 +182,8 @@ int main(){
                 break;
             case 4:
                //Show list of tasks
-               manager.listAllTasks();
+             //  manager.listAllTasks();
+                manager.getAllTasks();
                 break;
             case 5:
                //Show completed list of tasks

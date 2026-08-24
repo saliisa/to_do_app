@@ -7,7 +7,6 @@ tasks.json
 
 #ignore build file
 build
-build2
 
 #ignore testsDelete containing manually complied c++ files
 testsDelete
