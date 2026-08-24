@@ -2,37 +2,72 @@
 #include "../utils/utils.hpp"
 #include <algorithm>
 #include <fstream>
+#include <string>
 
-//#include "json.hpp"
-//using json = nlohmann::json;
 
 sqlite3* db;
+sqlite3_stmt* stmt;
+
+bool TaskManager::insertTask(Task& task){
+    //insert into sqlite db 
+    //TBD prepared statements to prevent SQL injection
+
+    //open db
+    if(sqlite3_open("./data/tasks.db", &db) != SQLITE_OK){
+        std::cout << "failed to open tasks db\n";
+        return false;
+    }
+
+    //sql 
+   std::string insertSql = "INSERT INTO tasks ( title, completed, priority, due_date) VALUES ('" +
+    task.getTitle() + "', " +
+    std::to_string(task.getIsCompleted()) + ", " +
+    std::to_string(task.getPriority()) + ", '" +
+    task.getDueDate() + "');";
+
+    std::cout << "DEBUG SQL: " << insertSql << std::endl;
 
 
+    //complies SQL into a prepared stmt; stores this complied stmt into "stmt"
+    if(sqlite3_prepare(db, insertSql.c_str(), -1, &stmt, NULL) !=SQLITE_OK){ //prepare stmt
+        std::cout << "Failed to prepare statement" << std::endl;
+        sqlite3_close(db);
+        return false;
+    } 
+
+ 
+    //executing prepared stmt
+    if(sqlite3_step(stmt) != SQLITE_DONE){
+        std::cout << "Failed to execute insert" << std::endl;
+        sqlite3_finalize(stmt);
+        sqlite3_close(db);
+        return false;
+    }
+    
+
+    sqlite3_finalize(stmt); //frees prepared stmt
+    sqlite3_close(db); // closes db connection
+
+    return true;
+
+}
+       
+ /*
+    bool getAllTasks();
+    void updateTask(Task& task);
+    void removeTask(int id);*/
 
 
-
-
-
-
-
-
-
-bool TaskManager:: addTask(Task task){
+bool TaskManager:: addTask(Task& task){
 
     if(!validateTitle(task.getTitle()) || !validateDate(task.getDueDate()) || 
         task.getPriority() < 1 || task.getPriority() > 3){
         return false;
     }
 
-    if(task.getId() == 0){
-        task.setId(nextId++);
-    }
     tasks.push_back(task);
     return true;
 }
-// void TaskManager:: addTask(int id, std::string title, bool status, int priority, std::string dueDate){ //to be implemented){
-
 
 
 bool TaskManager::deleteTask(int id){
@@ -117,33 +152,3 @@ bool TaskManager::taskExists(int id){
     }
     return false;
 } 
-
-/*void TaskManager::saveToJson(){
-    json j; //empty json array
-    
-    for(auto& t : tasks){
-        j.push_back(t.toJson());
-    }
-
-    std::ofstream file("tasks.json");
-    file << j.dump(4); // writes the JSON array into the file
-    // converts json to string
-    //format it with 4 spaces indentation
-}*/
-
-/*void TaskManager::loadFromJson(){
-   std::ifstream file("tasks.json");
-
-   json data = json::parse(file);
-
-   if(!file.is_open()){
-        //returns nothing if file doesnt exist 
-        return;
-   }
-
-   file >> data;
-
-   tasks.clear();
-}*/
-
-//void removeFromJson(int id){}
