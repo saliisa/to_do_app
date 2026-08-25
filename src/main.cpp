@@ -194,7 +194,8 @@ int main(){
                 break;
             case 5:
                //Show completed list of tasks
-               manager.listCompletedTasks();
+               //manager.listCompletedTasks();
+               manager.getCompletedTasks();
                 break;
             
             default:
