@@ -168,15 +168,22 @@ int main(){
                     std::cout << "Please input a valid number " <<endl;
                 }
 
-                if(!manager.taskExists(inputId)){
+              /*if(!manager.taskExists(inputId)){
                     std::cout << "ID does not exist." << endl;
                     break;
-                }
+                }*/  
 
-                if(manager.deleteTask(inputId)){
+               /* if(manager.deleteTask(inputId)){
                     std::cout << "Task deleted successfully!" <<endl;
                 } else{
                     std::cout << "Error deleting task" << endl;
+                }*/
+
+
+                if(manager.removeTask(inputId)){
+                    std::cout << "Task removed from database" << endl;
+                } else{
+                    std::cout << "Error removing task" <<endl;
                 }
                
                 break;

@@ -49,7 +49,10 @@ bool TaskManager::insertTask(Task& task){
        
 /*
 bool updateTask(Task& task);
-bool removeTask(int id);*/
+bool removeTask(int id);
+bool getCompletedTasks();
+bool getUncompletedTasks();
+*/
    
 bool TaskManager::getAllTasks(){
     //open db
@@ -91,6 +94,71 @@ bool TaskManager::getAllTasks(){
     return true;
 
 }
+
+
+bool TaskManager::removeTask(int id){
+    //TBD sql injection prevention
+
+    //open db
+    if(sqlite3_open("./data/tasks.db", &db) != SQLITE_OK){
+        std::cout << "failed to open tasks db\n";
+        return false;
+    }
+
+
+    std::string deleteSql = "DELETE FROM tasks where id = ?";
+
+    if(sqlite3_prepare(db, deleteSql.c_str(), -1, &stmt, NULL) !=SQLITE_OK){ //prepare stmt
+        std::cout << "Failed to prepare statement" << std::endl;
+        sqlite3_close(db);
+        return false;
+    } 
+
+    sqlite3_bind_int(stmt,1,id);
+    //what if ID doesnt exist?
+
+
+    if(sqlite3_step(stmt) != SQLITE_DONE){
+        std::cout << "Failed to execute delete" <<std::endl;
+        sqlite3_finalize(stmt);
+        sqlite3_close(db);
+        return false;
+    }
+
+    int changes = sqlite3_changes(db);
+
+    if(changes == 0){
+        std::cout << "No task with that ID exists.\n";
+        return false;
+    }
+
+    sqlite3_finalize(stmt);
+    sqlite3_close(db); 
+    return true;
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 bool TaskManager:: addTask(Task& task){
