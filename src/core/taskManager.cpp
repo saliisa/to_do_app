@@ -25,16 +25,12 @@ bool TaskManager::insertTask(Task& task){
     std::to_string(task.getPriority()) + ", '" +
     task.getDueDate() + "');";
 
-    std::cout << "DEBUG SQL: " << insertSql << std::endl;
-
-
     //complies SQL into a prepared stmt; stores this complied stmt into "stmt"
     if(sqlite3_prepare(db, insertSql.c_str(), -1, &stmt, NULL) !=SQLITE_OK){ //prepare stmt
         std::cout << "Failed to prepare statement" << std::endl;
         sqlite3_close(db);
         return false;
     } 
-
  
     //executing prepared stmt
     if(sqlite3_step(stmt) != SQLITE_DONE){
@@ -44,7 +40,6 @@ bool TaskManager::insertTask(Task& task){
         return false;
     }
     
-
     sqlite3_finalize(stmt); //frees prepared stmt
     sqlite3_close(db); // closes db connection
 
@@ -52,10 +47,50 @@ bool TaskManager::insertTask(Task& task){
 
 }
        
- /*
-    bool getAllTasks();
-    void updateTask(Task& task);
-    void removeTask(int id);*/
+/*
+bool updateTask(Task& task);
+bool removeTask(int id);*/
+   
+bool TaskManager::getAllTasks(){
+    //open db
+    if(sqlite3_open("./data/tasks.db", &db) != SQLITE_OK){
+        std::cout << "failed to open tasks db\n";
+        return false;
+    }
+
+    std::string sql = "SELECT * FROM tasks;";
+
+    //complies SQL into a prepared stmt; stores this complied stmt into "stmt"
+    if(sqlite3_prepare(db, sql.c_str(), -1, &stmt, NULL) !=SQLITE_OK){ //prepare stmt
+        std::cout << "Failed to prepare statement" << std::endl;
+        sqlite3_close(db);
+        return false;
+    } 
+
+    std::cout <<"\n\n";
+    std::cout << "== Tasks ==" << std::endl;
+
+    //print column names
+    int colCount = sqlite3_column_count(stmt);
+    for(int i =0; i < colCount; i++){
+        std::cout << sqlite3_column_name(stmt,i) << " | ";
+    }
+    std::cout <<"\n-------------------------------------\n";
+
+    //print row values 
+    while(sqlite3_step(stmt) == SQLITE_ROW){ //return one row per call
+        for(int i = 0; i < colCount; i++){
+            const char* value = reinterpret_cast<const char*>(sqlite3_column_text(stmt, i)); //values from row
+            std::cout << (value ? value: "NULL") << " | ";
+
+        }
+        std::cout <<"\n\n";
+    }
+    sqlite3_finalize(stmt); //frees prepared stmt
+    sqlite3_close(db); // closes db connection
+    return true;
+
+}
 
 
 bool TaskManager:: addTask(Task& task){
