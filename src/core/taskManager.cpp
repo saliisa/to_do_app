@@ -182,7 +182,95 @@ bool TaskManager::getCompletedTasks(){
 
 
 
+bool TaskManager::updateTask(int id, TaskUpdate& update){ // redo database.cpp structure to avoid opening db everytime functions are called
+    if(sqlite3_open("./data/tasks.db", &db) != SQLITE_OK){
+        std::cout << "failed to open tasks db\n";
+        return false;
+    }
+ 
 
+    std::vector<std::string> setClauses; //dynamic setClause sql
+
+    if(update.title.has_value()){
+        setClauses.push_back("title = ?");
+    }
+
+    if(update.status.has_value()){
+        setClauses.push_back("completed = ?");
+    }
+
+    if(update.priority.has_value()){
+        setClauses.push_back("priority = ?");
+    }
+
+    if(update.dueDate.has_value()){
+        setClauses.push_back("due_date = ?");
+    }
+
+    if(setClauses.empty()){
+        std::cout << "No fields to update" << std::endl;
+        sqlite3_close(db);
+        return false;
+    }
+
+    std::string updateSql = "UPDATE tasks SET ";
+
+    for(size_t i = 0; i < setClauses.size(); ++i){ //size_t unsigned type 
+       if (i > 0) {
+            updateSql += ", ";   //sql string separator except before the first clause
+        }
+      updateSql += setClauses[i];
+    }
+    updateSql += " WHERE id = ?;";
+
+    //complies SQL into a prepared stmt; stores this complied stmt into "stmt"
+    if(sqlite3_prepare_v2(db, updateSql.c_str(), -1, &stmt, nullptr) !=SQLITE_OK){ //prepare stmt
+       std::cout << "Failed to prepare statement: " << sqlite3_errmsg(db) << std::endl;
+        //std::cout << "SQL was: " << updateSql << std::endl;
+        sqlite3_close(db);
+        return false;
+    } 
+
+    int idx = 1; //counter that only increments when a field is actually bound
+
+    if (update.title.has_value()){
+        sqlite3_bind_text(stmt, idx++, update.title->c_str(), -1, SQLITE_TRANSIENT);
+    }
+       
+    if (update.status.has_value()){
+        sqlite3_bind_int(stmt, idx++, update.status.value());
+    }
+
+    if (update.priority.has_value()){
+        sqlite3_bind_int(stmt, idx++, update.priority.value());
+    }
+
+    if (update.dueDate.has_value()){
+        sqlite3_bind_text(stmt,idx++, update.dueDate->c_str(), -1, SQLITE_TRANSIENT);
+    }
+
+    sqlite3_bind_int(stmt, idx, id); //WHERE id = ?
+
+
+    //executing prepared stmt
+    if(sqlite3_step(stmt) != SQLITE_DONE){
+        std::cout << "Failed to execute update" << sqlite3_errmsg(db) << std::endl;
+        //std::cout << "SQL was: " << updateSql << std::endl;
+        sqlite3_finalize(stmt);
+        sqlite3_close(db);
+        return false;
+    }
+
+    bool rowUpdated = sqlite3_changes(db) > 0;
+    if (!rowUpdated) {
+        std::cout << "No task found with id " << id << std::endl;
+    }
+    
+    sqlite3_finalize(stmt); //frees prepared stmt
+    sqlite3_close(db); // closes db connection
+
+    return rowUpdated;
+}
 
 
 

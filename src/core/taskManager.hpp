@@ -26,10 +26,10 @@ class TaskManager{
        // void createTable(); //needed? --> is the DB schema created?
         bool insertTask(Task& task);
         bool getAllTasks();
-        bool updateTask(Task& task);
+        bool updateTask(int id, TaskUpdate& update);
         bool removeTask(int id);
         bool getCompletedTasks();
-        bool getUncompletedTasks();
+       // bool getUncompletedTasks();
 
        // static int callback(void* data, int argc, char **argv, char **colNames );
 
