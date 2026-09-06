@@ -96,10 +96,10 @@ int main(){
                 cin >> inputId;
                 cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 
-               if(!manager.taskExists(inputId)){
+              /* if(!manager.taskExists(inputId)){
                     std::cout << "ID does not exist." << endl;
                     break;
-                }
+                }*/
 
                 //title
                 std::cout << "New title (leave empty to keep): " ;
@@ -149,12 +149,18 @@ int main(){
                    update.dueDate = dueDate;
                 }
 
-                if(manager.editTask(inputId, update)){
+              /* if(manager.editTask(inputId, update)){
+                    std::cout << "Task updated successfully!." <<endl;
+                } else{
+                    std::cout << "Error updating task. " <<endl;
+                }*/ 
+
+
+                if(manager.updateTask(inputId, update)){
                     std::cout << "Task updated successfully!." <<endl;
                 } else{
                     std::cout << "Error updating task. " <<endl;
                 }
-
                 break;
             }
                
