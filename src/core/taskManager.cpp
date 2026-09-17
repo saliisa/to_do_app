@@ -19,18 +19,20 @@ bool TaskManager::insertTask(Task& task){
     }
 
     //sql 
-   std::string insertSql = "INSERT INTO tasks ( title, completed, priority, due_date) VALUES ('" +
-    task.getTitle() + "', " +
-    std::to_string(task.getIsCompleted()) + ", " +
-    std::to_string(task.getPriority()) + ", '" +
-    task.getDueDate() + "');";
+   std::string insertSql = "INSERT INTO tasks ( title, completed, priority, due_date) VALUES (?, ?, ?, ?);";
 
     //complies SQL into a prepared stmt; stores this complied stmt into "stmt"
-    if(sqlite3_prepare(db, insertSql.c_str(), -1, &stmt, NULL) !=SQLITE_OK){ //prepare stmt
+    if(sqlite3_prepare_v2(db, insertSql.c_str(), -1, &stmt, NULL) !=SQLITE_OK){ //prepare stmt
         std::cout << "Failed to prepare statement" << std::endl;
         sqlite3_close(db);
         return false;
     } 
+
+    //prevent sql injection
+    sqlite3_bind_text(stmt, 1, task.getTitle().c_str(), -1, SQLITE_TRANSIENT);
+    sqlite3_bind_int(stmt, 2, task.getIsCompleted() ? 1 : 0);
+    sqlite3_bind_int(stmt, 3, task.getPriority());
+    sqlite3_bind_text(stmt, 4, task.getDueDate().c_str(), -1, SQLITE_TRANSIENT);
  
     //executing prepared stmt
     if(sqlite3_step(stmt) != SQLITE_DONE){
